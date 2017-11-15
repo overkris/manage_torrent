@@ -67,6 +67,13 @@ class FilesInTransmission
     private $idTransmission;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="percent", type="smallint", nullable=false)
+     */
+    private $percent;
+
+    /**
      * @return string
      */
     public function getName()
@@ -177,5 +184,22 @@ class FilesInTransmission
     {
         $this->idTransmission = $idTransmission;
     }
+
+    /**
+     * @return int
+     */
+    public function getPercent()
+    {
+        return $this->percent;
+    }
+
+    /**
+     * @param int $percent
+     */
+    public function setPercent($percent)
+    {
+        $this->percent = $percent;
+    }
+
 }
 

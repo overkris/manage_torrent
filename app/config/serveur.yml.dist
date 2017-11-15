@@ -1,6 +1,6 @@
 # Configuration du serveur
 parameters:
-    directory_torrent:
+    param_serveur.directory_torrent:
     param_serveur.download_site:
     param_serveur.download_file:
     param_serveur.download_file_log:

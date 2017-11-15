@@ -65,7 +65,7 @@ class WgetFile extends ContainerAwareCommand
 
             $sUrl = $this->getContainer()->getParameter("param_serveur.download_site");
             $aUrlTorrent = $sUrl.$aTorrentFile->getName();
-            $sNameLog = $this->getContainer()->getParameter("download_file_log")."/".$aTorrentFile->getHashName().".log";
+            $sNameLog = $this->getContainer()->getParameter("param_serveur.download_file_log")."/".$aTorrentFile->getHashName().".log";
             AddWgetAction::addWget($aUrlTorrent, $this->getContainer()->getParameter("param_serveur.download_file"), $sNameLog);
 
             $objFileInDownload = new FilesInDownload();
