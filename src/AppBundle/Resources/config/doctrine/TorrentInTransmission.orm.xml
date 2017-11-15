@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\TorrentInTransmission" table="torrent_in_transmission">
+    <indexes>
+      <index name="IDX_80A2D75755CAF762" columns="etat"/>
+    </indexes>
+    <id name="idTransmission" type="integer" column="id_transmission">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="hashString" type="string" column="hash_string" length="50" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="name" type="string" column="name" length="500" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="dateAjout" type="datetime" column="date_ajout" nullable="false"/>
+    <field name="etatDlTrans" type="string" column="etat_dl_trans" length="50" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <many-to-one field="etat" target-entity="Etats" fetch="LAZY">
+      <join-columns>
+        <join-column name="etat" referenced-column-name="id_etat"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

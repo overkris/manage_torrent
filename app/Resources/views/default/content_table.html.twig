@@ -1,0 +1,20 @@
+{% for torrent in data_torrent %}
+    <tr>
+        <td>{{ torrent.name }}</td>
+        <td>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: {{ torrent.percent_trans }}%;" aria-valuenow="{{ torrent.percent_trans }}"
+                     aria-valuemin="0" aria-valuemax="100">{{ torrent.percent_trans }}%</div>
+            </div>
+        </td>
+        <td><div class="progress">
+                <div class="progress-bar" role="progressbar"
+                     style="width: {{ torrent.percent_wget }}%;" aria-valuenow="{{ torrent.percent_wget }}"
+                     aria-valuemin="0" aria-valuemax="100">{{ torrent.percent_wget }}%</div>
+            </div>
+        </td>
+        <td>{{ torrent.speed_wget }}</td>
+        <td>{{ torrent.time_left }}</td>
+    </tr>
+{% endfor %}

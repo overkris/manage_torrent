@@ -1,0 +1,6 @@
+# Fichier de configuration de transmission
+parameters:
+  transmission.url:
+  transmission.user:
+  transmission.mdp:
+  transmission.download_dir:

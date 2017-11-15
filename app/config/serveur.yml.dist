@@ -1,0 +1,7 @@
+# Configuration du serveur
+parameters:
+    directory_torrent:
+    param_serveur.download_site:
+    param_serveur.download_file:
+    param_serveur.download_file_log:
+    param_serveur.nb_max_error: 5

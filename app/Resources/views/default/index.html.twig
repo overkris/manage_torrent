@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h2>Etat des torrent</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nom du torrent</th>
+                    <th>Pourcentage Transmission</th>
+                    <th>Pourcentage Wget</th>
+                    <th>Speed</th>
+                    <th>Temps</th>
+                </tr>
+            </thead>
+            <tbody id="content_table">
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+            refreshContent();
+            var auto_refresh = setInterval( function() {
+                refreshContent();
+            }, 2000);
+        });
+
+        function refreshContent() {
+            $.get( "/content_table", function( data ) {
+                $( "#content_table" ).html( data );
+            });
+        }
+
+    </script>
+{% endblock %}
