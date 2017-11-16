@@ -6,8 +6,11 @@ use AppBundle\Entity\FilesInTransmission;
 use AppBundle\Entity\TorrentInTransmission;
 use AppBundle\Model\GetDataDownload;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class DefaultController extends Controller
 {
@@ -23,8 +26,14 @@ class DefaultController extends Controller
     /**
      * @Route("/content_table", name="homepage_content")
      */
-    public function getContentTableAction(GetDataDownload $objTorrent)
+    public function getContentTableAction(GetDataDownload $objTorrent, KernelInterface $kernel)
     {
+        // Call de la commande
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+        $input = new ArrayInput(['command' => 'torrent:call_all_command']);
+        $application->run($input);
+
         $aDataTorrent = [];
         foreach ($objTorrent->getDataFileIntransmission() as $aTorrent) {
             $aDataTorrent[] = array(
