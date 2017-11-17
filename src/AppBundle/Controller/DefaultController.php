@@ -33,6 +33,8 @@ class DefaultController extends Controller
         $application->setAutoExit(false);
         $input = new ArrayInput(['command' => 'torrent:read_log_wget_file']);
         $application->run($input);
+        $input = new ArrayInput(['command' => 'torrent:show_trans']);
+        $application->run($input);
 
         $aDataTorrent = [];
         foreach ($objTorrent->getDataFileIntransmission() as $aTorrent) {

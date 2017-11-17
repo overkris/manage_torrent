@@ -48,7 +48,7 @@ class ShowTransmission extends ContainerAwareCommand
             $qb = $entityManager->createQueryBuilder();
             $qb->delete(FilesInTransmission::class, "fit")
                 ->where("fit.idTorrentInTransmission = :idTorrentInTransmission")
-                ->setParameter("idTorrentInTransmission", $file->getIdTransmission())
+                ->setParameter("idTorrentInTransmission", $file->getId())
                 ->getQuery()->execute();
 
             // Get de la liste des fichiers dans transmission
