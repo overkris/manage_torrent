@@ -47,8 +47,8 @@ class ShowTransmission extends ContainerAwareCommand
         foreach ($aListeTorrent as $file) {
             $qb = $entityManager->createQueryBuilder();
             $qb->delete(FilesInTransmission::class, "fit")
-                ->where("fit.idTransmission = :idTransmission")
-                ->setParameter("idTransmission", $file->getIdTransmission())
+                ->where("fit.idTorrentInTransmission = :idTorrentInTransmission")
+                ->setParameter("idTorrentInTransmission", $file->getIdTransmission())
                 ->getQuery()->execute();
 
             // Get de la liste des fichiers dans transmission
@@ -68,7 +68,7 @@ class ShowTransmission extends ContainerAwareCommand
 
                 // Ajout en base de données
                 $objFileInTrans = new FilesInTransmission();
-                $objFileInTrans->setIdTransmission($file);
+                $objFileInTrans->setIdTorrentInTransmission($file);
                 $objFileInTrans->setName($objFile->name);
                 $objFileInTrans->setHashName(hash("md5", $objFile->name));
                 $objFileInTrans->setLength($objFile->length);

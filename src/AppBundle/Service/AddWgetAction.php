@@ -12,7 +12,7 @@ use Symfony\Component\Process\Process;
 
 class AddWgetAction
 {
-    const WGET_COMMANDE = "wget -P %s -o %s '%s'";
+    const WGET_COMMANDE = 'wget -P %s -o %s "%s"';
 
     public static function addWget($sUrlFile, $sDestFile, $sDestLog)
     {

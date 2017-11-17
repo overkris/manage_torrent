@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * FilesInTransmission
  *
- * @ORM\Table(name="files_in_transmission", indexes={@ORM\Index(name="FK__torrent_in_transmission", columns={"id_transmission"})})
+ * @ORM\Table(name="files_in_transmission", indexes={@ORM\Index(name="FK_files_in_transmission_torrent_in_transmission", columns={"id_torrent_in_transmission"})})
  * @ORM\Entity
  */
 class FilesInTransmission
@@ -61,15 +61,15 @@ class FilesInTransmission
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TorrentInTransmission")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_transmission", referencedColumnName="id_transmission")
+     *   @ORM\JoinColumn(name="id_torrent_in_transmission", referencedColumnName="id")
      * })
      */
-    private $idTransmission;
+    private $idTorrentInTransmission;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="percent", type="smallint", nullable=false)
+     * @ORM\Column(name="percent", type="smallint")
      */
     private $percent;
 
@@ -172,17 +172,17 @@ class FilesInTransmission
     /**
      * @return TorrentInTransmission
      */
-    public function getIdTransmission()
+    public function getIdTorrentInTransmission()
     {
-        return $this->idTransmission;
+        return $this->idTorrentInTransmission;
     }
 
     /**
-     * @param TorrentInTransmission $idTransmission
+     * @param TorrentInTransmission $idTorrentInTransmission
      */
-    public function setIdTransmission($idTransmission)
+    public function setIdTorrentInTransmission($idTorrentInTransmission)
     {
-        $this->idTransmission = $idTransmission;
+        $this->idTorrentInTransmission = $idTorrentInTransmission;
     }
 
     /**
@@ -200,6 +200,5 @@ class FilesInTransmission
     {
         $this->percent = $percent;
     }
-
 }
 

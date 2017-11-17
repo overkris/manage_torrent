@@ -7,11 +7,18 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * TorrentInTransmission
  *
- * @ORM\Table(name="torrent_in_transmission", indexes={@ORM\Index(name="IDX_80A2D75755CAF762", columns={"etat"})})
+ * @ORM\Table(name="torrent_in_transmission", indexes={@ORM\Index(name="id_transmission", columns={"id_transmission"}), @ORM\Index(name="FK_torrent_in_transmission_etats", columns={"etat"})})
  * @ORM\Entity
  */
 class TorrentInTransmission
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_transmission", type="integer", nullable=false)
+     */
+    private $idTransmission;
+
     /**
      * @var string
      *
@@ -36,18 +43,18 @@ class TorrentInTransmission
     /**
      * @var string
      *
-     * @ORM\Column(name="etat_dl_trans", type="string", length=50, nullable=false)
+     * @ORM\Column(name="etat_dl_trans", type="string", length=50, nullable=true)
      */
     private $etatDlTrans;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="id_transmission", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $idTransmission;
+    private $id;
 
     /**
      * @var \AppBundle\Entity\Etats
@@ -58,6 +65,22 @@ class TorrentInTransmission
      * })
      */
     private $etat;
+
+    /**
+     * @return int
+     */
+    public function getIdTransmission()
+    {
+        return $this->idTransmission;
+    }
+
+    /**
+     * @param int $idTransmission
+     */
+    public function setIdTransmission($idTransmission)
+    {
+        $this->idTransmission = $idTransmission;
+    }
 
     /**
      * @return string
@@ -126,17 +149,17 @@ class TorrentInTransmission
     /**
      * @return int
      */
-    public function getIdTransmission()
+    public function getId()
     {
-        return $this->idTransmission;
+        return $this->id;
     }
 
     /**
-     * @param int $idTransmission
+     * @param int $id
      */
-    public function setIdTransmission($idTransmission)
+    public function setId($id)
     {
-        $this->idTransmission = $idTransmission;
+        $this->id = $id;
     }
 
     /**

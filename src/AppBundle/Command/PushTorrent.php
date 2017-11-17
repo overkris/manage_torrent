@@ -50,11 +50,13 @@ class PushTorrent extends ContainerAwareCommand
             $output->writeln("Fichier ".$file->getBasename());
             // Push du fichier sur le serveur transmission
             $objResp = $this->_pushTorrentTransmission(file_get_contents($file->getRealPath()));
+
             if ($objResp->result == "success") {
-                if (!$onjTorrentInTrans = $entityManager->getRepository(TorrentInTransmission::class)->find($objResp->id)) {
+                if (NULL === $onjTorrentInTrans = $entityManager->getRepository(TorrentInTransmission::class)->find($objResp->id)) {
                     $onjTorrentInTrans = new TorrentInTransmission();
                     $onjTorrentInTrans->setIdTransmission($objResp->id);
                 }
+
                 $onjTorrentInTrans->setName($objResp->name);
                 $onjTorrentInTrans->setDateAjout(new \DateTime());
                 $onjTorrentInTrans->setEtat($entityManager->getReference(Etats::class,1));
