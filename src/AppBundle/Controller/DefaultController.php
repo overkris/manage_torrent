@@ -31,7 +31,7 @@ class DefaultController extends Controller
         // Call de la commande
         $application = new Application($kernel);
         $application->setAutoExit(false);
-        $input = new ArrayInput(['command' => 'torrent:call_all_command']);
+        $input = new ArrayInput(['command' => 'torrent:read_log_wget_file']);
         $application->run($input);
 
         $aDataTorrent = [];
