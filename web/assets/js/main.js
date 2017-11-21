@@ -1,16 +1,12 @@
+// Include de Vue et Vuetify
+import Vue from 'vue/dist/vue';
+import Vuetify from 'vuetify';
+window.Vue = Vue;
+window.Vuetify = Vuetify;
+window.Vue.use(Vuetify);
+
+// Include de Jquery
 import $ from 'jquery';
 window.jQuery = $;
 window.$ = $;
 global.jQuery = $;
-
-// JS is equivalent to the normal "bootstrap" package
-// no need to set this to a variable, just require it
-require('bootstrap-sass');
-
-// or you can include specific pieces
-// require('bootstrap-sass/javascripts/bootstrap/tooltip');
-// require('bootstrap-sass/javascripts/bootstrap/popover');
-
-$(document).ready(function() {
-    $('[data-toggle="popover"]').popover();
-});

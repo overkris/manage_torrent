@@ -1,39 +1,104 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container">
-        <h2>Etat des torrent</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nom du torrent</th>
-                    <th>Pourcentage Transmission</th>
-                    <th>Pourcentage Wget</th>
-                    <th>Speed</th>
-                    <th>Temps</th>
-                </tr>
-            </thead>
-            <tbody id="content_table">
+    <v-app id="app">
+        <v-container fluid fill-height>
+            <v-layout
+                    justify-center
+                    align-center
+            >
 
-            </tbody>
-        </table>
-    </div>
+                <v-data-table
+                        v-bind:headers="headers"
+                        v-bind:items="items"
+                        hide-actions
+                        class="elevation-1"
+                        v-bind:pagination.sync="pagination"
+                >
+                    <template slot="items" slot-scope="props">
+                        <td>${ props.item.name_torrent }</td>
+                        <td class="text-xs-right">
+                            <v-progress-circular
+                                    v-bind:size=sizeProgress
+                                    v-bind:width=widthProgress
+                                    v-bind:rotate="280"
+                                    v-bind:value=props.item.percent_trans
+                                    color="green"
+                            >
+                                ${ props.item.percent_trans }
+                            </v-progress-circular>
+                        </td>
+                        <td class="text-xs-right">
+                            <v-progress-circular
+                                    v-bind:size=sizeProgress
+                                    v-bind:width=widthProgress
+                                    v-bind:rotate="280"
+                                    v-bind:value=props.item.percent_wget
+                                    color="green"
+                            >
+                                ${ props.item.percent_wget }
+                            </v-progress-circular>
+                        </td>
+                        <td class="text-xs-right">${ props.item.speed_wget }</td>
+                        <td class="text-xs-right">${ props.item.time_left }</td>
+                        <td class="text-xs-right">${ props.item.start_date }</td>
+                    </template>
+                    <template slot="no-data">
+                        <v-progress-circular indeterminate color="primary" v-bind:size="50"></v-progress-circular>
+                    </template>
+                </v-data-table>
+            </v-layout>
+        </v-container>
+    </v-app>
 {% endblock %}
 
 {% block javascripts %}
     <script>
-        $(document).ready(function() {
-            refreshContent();
-            var auto_refresh = setInterval( function() {
-                refreshContent();
-            }, 2000);
+        var vue = new Vue({
+            el: '#app',
+            delimiters: ['${', '}'],
+            data () {
+                return {
+                    drawer: null,
+                    pagination_rows_per: "all",
+                    pagination: {
+                        sortBy: 'start_date',
+                        descending: true,
+                        rowsPerPage: "100"
+                    },
+                    sizeProgress: 35,
+                    widthProgress: 3,
+                    interval: {},
+                    headers: [
+                        {text: 'Nom du torrent', value: 'name_torrent', align: 'left'},
+                        {text: 'Pourcentage Transmission', value: 'percent_trans'},
+                        {text: 'Pourcentage Wget', value: 'percent_wget'},
+                        {text: 'Speed', value: 'speed_wget'},
+                        {text: 'Temps', value: 'time_left'},
+                        {text: 'Date Début', value: 'start_date'}
+                    ],
+                    items: []
+                }
+            },
+            mounted () {
+                this.updateGrid();
+                this.interval = setInterval(() => {
+                    this.updateGrid();
+                }, 2000)
+            },
+            methods: {
+                clickButton: function () {
+                    alert("click");
+                },
+                updateGrid: function () {
+                    $.get( "/content_table", function( data ) {
+                        vue.items = data;
+                    });
+                }
+            },
+            props: {
+                source: String
+            }
         });
-
-        function refreshContent() {
-            $.get( "/content_table", function( data ) {
-                $( "#content_table" ).html( data );
-            });
-        }
-
     </script>
 {% endblock %}

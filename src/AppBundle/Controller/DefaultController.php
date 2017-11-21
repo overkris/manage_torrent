@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -39,16 +40,15 @@ class DefaultController extends Controller
         $aDataTorrent = [];
         foreach ($objTorrent->getDataFileIntransmission() as $aTorrent) {
             $aDataTorrent[] = array(
-                "name" => $aTorrent["name"],
+                "name_torrent" => $aTorrent["name"],
                 "percent_trans" => round(((int)$aTorrent["bytesCompleted"]*100)/(int)$aTorrent["length"], 1),
                 "percent_wget" => $aTorrent["percent"],
                 "speed_wget" => $aTorrent["speed"],
-                "time_left" => $aTorrent["time_left"]
+                "time_left" => $aTorrent["time_left"],
+                "start_date" => $aTorrent["start_date"]
             );
         }
 
-        return $this->render('default/content_table.html.twig', [
-            'data_torrent' => $aDataTorrent
-        ]);
+        return JsonResponse::create($aDataTorrent);
     }
 }

@@ -21,5 +21,4 @@
 /app/config/serveur.yml
 /app/config/transmission.yml
 /composer.lock
-/web/build/*
 /yarn.lock
