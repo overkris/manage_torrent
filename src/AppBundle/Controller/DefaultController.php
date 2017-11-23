@@ -45,7 +45,7 @@ class DefaultController extends Controller
                 "percent_wget" => $aTorrent["percent"],
                 "speed_wget" => $aTorrent["speed"],
                 "time_left" => $aTorrent["time_left"],
-                "start_date" => $aTorrent["start_date"]
+                "start_date" => $aTorrent["date_ajout"]
             );
         }
 

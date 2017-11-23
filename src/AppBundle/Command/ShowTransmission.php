@@ -45,12 +45,6 @@ class ShowTransmission extends ContainerAwareCommand
 
         // Traitement par torrent
         foreach ($aListeTorrent as $file) {
-            $qb = $entityManager->createQueryBuilder();
-            $qb->delete(FilesInTransmission::class, "fit")
-                ->where("fit.idTorrentInTransmission = :idTorrentInTransmission")
-                ->setParameter("idTorrentInTransmission", $file->getId())
-                ->getQuery()->execute();
-
             // Get de la liste des fichiers dans transmission
             $aListeObjFile = $this->_getTorrentTransmission($file->getIdTransmission());
             $nbListeObjFile = count($aListeObjFile);
@@ -66,11 +60,21 @@ class ShowTransmission extends ContainerAwareCommand
                 // Pourcentage
                 $iPourcentage = round(($objFile->bytesCompleted*100)/$objFile->length, 1);
 
+                $sHachName = hash("md5", $objFile->name);
+                if (NULL === $objFileInTrans = $entityManager
+                        ->getRepository(FilesInTransmission::class)
+                        ->findOneBy(array(
+                            "idTorrentInTransmission" => $file,
+                            "hashName" => $sHachName
+                        )))
+                {
+                    $objFileInTrans = new FilesInTransmission();
+                    $objFileInTrans->setHashName($sHachName);
+                    $objFileInTrans->setIdTorrentInTransmission($file);
+                    $objFileInTrans->setName($objFile->name);
+                }
+
                 // Ajout en base de données
-                $objFileInTrans = new FilesInTransmission();
-                $objFileInTrans->setIdTorrentInTransmission($file);
-                $objFileInTrans->setName($objFile->name);
-                $objFileInTrans->setHashName(hash("md5", $objFile->name));
                 $objFileInTrans->setLength($objFile->length);
                 $objFileInTrans->setBytescompleted($objFile->bytesCompleted);
                 $objFileInTrans->setIsOk($charIsOk);

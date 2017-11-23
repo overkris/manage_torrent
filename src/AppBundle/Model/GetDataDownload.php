@@ -32,9 +32,10 @@ class GetDataDownload
         $query = $this->doctrine->createQueryBuilder()
             ->select("fit.name", "fit.bytesCompleted", "fit.length",
                 "fid.percent", "fid.speed", "fid.time_left",
-                "fid.start_date")
+                "tit.date_ajout")
             ->from("files_in_transmission", "fit")
             ->leftJoin("fit", "files_in_download", "fid", "fit.hash_name = fid.hash_name")
+            ->leftJoin("fit", "torrent_in_transmission", "tit", "tit.id = fit.id_torrent_in_transmission")
             ->orderBy("fit.id", "DESC");
         $query->getSQL();
 
