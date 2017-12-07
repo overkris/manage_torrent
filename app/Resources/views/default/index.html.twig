@@ -114,7 +114,7 @@
                 synchroniseTrans: function () {
                     this.is_visible_load = true;
                     $.get( "/check_torrent", function( data ) {
-                        this.is_visible_load = false;
+                        vue.is_visible_load = false;
                     });
                 }
             },
