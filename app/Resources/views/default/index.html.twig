@@ -5,9 +5,14 @@
         <v-container fluid fill-height>
             <v-layout
                     justify-center
-                    align-center
+                    align-center row wrap
             >
-
+                <v-flex xs12 text-xs-center display-1>
+                    Gestion des torrents
+                    <v-btn v-on:click="synchroniseTrans" color="primary">Synchronise Transmission &nbsp;&nbsp;
+                        <v-progress-circular  v-if="is_visible_load" indeterminate color="red"></v-progress-circular></v-btn>
+                </v-flex>
+                <v-flex xs12>
                 <v-data-table
                         v-bind:headers="headers"
                         v-bind:items="items"
@@ -16,6 +21,11 @@
                         v-bind:pagination.sync="pagination"
                 >
                     <template slot="items" slot-scope="props">
+                        <td>
+                            <v-icon v-if="props.item.is_delete === 'N'" small color="primary" v-on:click="delete_transmission" v-bind:id=props.item.id_transmission>mdi-delete</v-icon>
+                            <v-icon v-else small color="red" v-bind:id=props.item.id_transmission>mdi-delete</v-icon>
+                            <v-icon v-if="props.item.is_delete === 'O'" small color="red" v-on:click="delete_table" v-bind:id=props.item.id_transmission>mdi-close</v-icon>
+                        </td>
                         <td>${ props.item.name_torrent }</td>
                         <td class="text-xs-right">
                             <v-progress-circular
@@ -47,6 +57,7 @@
                         <v-progress-circular indeterminate color="primary" v-bind:size="50"></v-progress-circular>
                     </template>
                 </v-data-table>
+                </v-flex>
             </v-layout>
         </v-container>
     </v-app>
@@ -59,6 +70,7 @@
             delimiters: ['${', '}'],
             data () {
                 return {
+                    is_visible_load: false,
                     drawer: null,
                     pagination_rows_per: "all",
                     pagination: {
@@ -70,6 +82,7 @@
                     widthProgress: 3,
                     interval: {},
                     headers: [
+                        {text: '', value: 'action'},
                         {text: 'Nom du torrent', value: 'name_torrent', align: 'left'},
                         {text: 'Pourcentage Transmission', value: 'percent_trans'},
                         {text: 'Pourcentage Wget', value: 'percent_wget'},
@@ -87,12 +100,21 @@
                 }, 2000)
             },
             methods: {
-                clickButton: function () {
-                    alert("click");
+                delete_transmission: function (event) {
+                    $.post( "/delete_torrent_transmission", {id_torrent: event.target.id});
+                },
+                delete_table: function (event) {
+                    $.post( "/delete_torrent", {id_torrent: event.target.id});
                 },
                 updateGrid: function () {
                     $.get( "/content_table", function( data ) {
                         vue.items = data;
+                    });
+                },
+                synchroniseTrans: function () {
+                    this.is_visible_load = true;
+                    $.get( "/check_torrent", function( data ) {
+                        this.is_visible_load = false;
                     });
                 }
             },

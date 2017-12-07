@@ -48,6 +48,13 @@ class TorrentInTransmission
     private $etatDlTrans;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="is_delete", type="string", length=1, nullable=false)
+     */
+    private $isDelete = "N";
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -176,6 +183,22 @@ class TorrentInTransmission
     public function setEtat($etat)
     {
         $this->etat = $etat;
+    }
+
+    /**
+     * @return string
+     */
+    public function getisDelete()
+    {
+        return $this->isDelete;
+    }
+
+    /**
+     * @param string $isDelete
+     */
+    public function setIsDelete($isDelete)
+    {
+        $this->isDelete = $isDelete;
     }
 }
 

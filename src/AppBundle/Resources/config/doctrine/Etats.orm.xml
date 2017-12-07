@@ -4,7 +4,7 @@
     <id name="idEtat" type="smallint" column="id_etat">
       <generator strategy="IDENTITY"/>
     </id>
-    <field name="name" type="string" column="name" length="50" nullable="false">
+    <field name="name" type="string" column="name" length="50" nullable="true">
       <options>
         <option name="fixed"/>
       </options>

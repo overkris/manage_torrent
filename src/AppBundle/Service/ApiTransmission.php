@@ -15,6 +15,7 @@ class ApiTransmission
     private $_urlTransmission;
     private $_user;
     private $_mdp;
+    private $_csrf;
 
     /**
      * ApiTransmission constructor.
@@ -24,16 +25,16 @@ class ApiTransmission
         $this->_urlTransmission = $container->getParameter('transmission.url');
         $this->_user = $container->getParameter('transmission.user');
         $this->_mdp = $container->getParameter('transmission.mdp');
+        $this->_csrf = $this->_testCSRF();
     }
 
 
     public function callTransmission($objCallTransmission)
     {
         // Test du CSRF transmission
-        $mTestCSRF = $this->_testCSRF();
         $aHeader = array();
-        if ($mTestCSRF !== true) {
-            $aHeader["X-Transmission-Session-Id"] = $mTestCSRF;
+        if ($this->_csrf !== true) {
+            $aHeader["X-Transmission-Session-Id"] = $this->_csrf;
         }
 
         // Post du fichier sur transmission

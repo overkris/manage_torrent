@@ -55,6 +55,7 @@ class PushTorrent extends ContainerAwareCommand
                 if (NULL === $onjTorrentInTrans = $entityManager->getRepository(TorrentInTransmission::class)->find($objResp->id)) {
                     $onjTorrentInTrans = new TorrentInTransmission();
                     $onjTorrentInTrans->setIdTransmission($objResp->id);
+                    $onjTorrentInTrans->setIsDelete("N");
                 }
 
                 $onjTorrentInTrans->setName($objResp->name);

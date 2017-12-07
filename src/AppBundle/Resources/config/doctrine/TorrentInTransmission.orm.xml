@@ -3,7 +3,7 @@
   <entity name="AppBundle\Entity\TorrentInTransmission" table="torrent_in_transmission">
     <indexes>
       <index name="id_transmission" columns="id_transmission"/>
-      <index name="FK_torrent_in_transmission_etats" columns="etat"/>
+      <index name="etat" columns="etat"/>
     </indexes>
     <id name="id" type="integer" column="id">
       <generator strategy="IDENTITY"/>
@@ -27,6 +27,12 @@
     <field name="etatDlTrans" type="string" column="etat_dl_trans" length="50" nullable="true">
       <options>
         <option name="fixed"/>
+      </options>
+    </field>
+    <field name="isDelete" type="string" column="is_delete" length="1" nullable="false">
+      <options>
+        <option name="fixed">1</option>
+        <option name="default">N</option>
       </options>
     </field>
     <many-to-one field="etat" target-entity="Etats" fetch="LAZY">
