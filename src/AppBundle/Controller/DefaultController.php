@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\FilesInDownload;
 use AppBundle\Entity\FilesInTransmission;
 use AppBundle\Entity\TorrentInTransmission;
 use AppBundle\Model\GetDataDownload;
@@ -48,7 +49,10 @@ class DefaultController extends Controller
                 "time_left" => $aTorrent["time_left"],
                 "start_date" => $aTorrent["date_ajout"],
                 "id_transmission" => $aTorrent["id_transmission"],
-                "is_delete" => $aTorrent["is_delete"]
+                "id_download" => $aTorrent["id_download"],
+                "is_delete" => $aTorrent["is_delete"],
+                "is_clicked" => false,
+                "is_dl_wget_error" => $aTorrent["fid_etat"] == 3?true:false,
             );
         }
 
@@ -66,8 +70,8 @@ class DefaultController extends Controller
         $objCallTransmission = array(
             "method" => "torrent-remove",
             "arguments" => array(
-                "delete-local-data" => true,
-                "ids" => array($idTorrent)
+                "ids" => array((int)$idTorrent),
+                "delete-local-data" => true
             )
         );
 
@@ -120,7 +124,7 @@ class DefaultController extends Controller
             $objCallTransmission = array(
                 "method" => "torrent-get",
                 "arguments" => array(
-                    "ids" => array($torrent->getIdTransmission()),
+                    "ids" => array((int)$torrent->getIdTransmission()),
                     "fields" => array("files")
                 )
             );
@@ -135,6 +139,24 @@ class DefaultController extends Controller
             $em->flush();
         }
 
+
+        return JsonResponse::create(array("result" => "success"));
+    }
+
+
+    /**
+     * @Route("/reload_wget_torrent", name="reload_wget_torrent")
+     */
+    public function reloadWgetTorrent(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $idTorrent = $request->request->get("id_torrent");
+
+        $torrentInTransmission = $em->getRepository(FilesInDownload::class)
+            ->findOneByIdDownload($idTorrent);
+
+        $em->remove($torrentInTransmission);
+        $em->flush();
 
         return JsonResponse::create(array("result" => "success"));
     }

@@ -10,7 +10,8 @@
                 <v-flex xs12 text-xs-center display-1>
                     Gestion des torrents
                     <v-btn v-on:click="synchroniseTrans" color="primary">Synchronise Transmission &nbsp;&nbsp;
-                        <v-progress-circular  v-if="is_visible_load" indeterminate color="red"></v-progress-circular></v-btn>
+                        <v-progress-circular  v-if="is_visible_load" indeterminate color="red"></v-progress-circular>
+                    </v-btn>
                 </v-flex>
                 <v-flex xs12>
                 <v-data-table
@@ -22,9 +23,16 @@
                 >
                     <template slot="items" slot-scope="props">
                         <td>
-                            <v-icon v-if="props.item.is_delete === 'N'" small color="primary" v-on:click="delete_transmission" v-bind:id=props.item.id_transmission>mdi-delete</v-icon>
-                            <v-icon v-else small color="red" v-bind:id=props.item.id_transmission>mdi-delete</v-icon>
-                            <v-icon v-if="props.item.is_delete === 'O'" small color="red" v-on:click="delete_table" v-bind:id=props.item.id_transmission>mdi-close</v-icon>
+                            <div v-on:click="showLoad(props.item)">
+                                <template v-if="!props.item.is_clicked">
+                                    <v-icon v-if="props.item.is_delete === 'N'" small color="primary" v-on:click="delete_transmission(props.item)" v-bind:id=props.item.id_transmission>mdi-delete</v-icon>
+                                    <v-icon v-else small color="red" v-bind:id=props.item.id_transmission>mdi-delete</v-icon>
+                                    <v-icon v-if="props.item.is_delete === 'O'" small color="red" v-on:click="delete_table" v-bind:id=props.item.id_transmission>mdi-close</v-icon>
+                                </template>
+                                <template v-else>
+                                    <v-progress-circular indeterminate color="red"></v-progress-circular>
+                                </template>
+                            </div>
                         </td>
                         <td>${ props.item.name_torrent }</td>
                         <td class="text-xs-right">
@@ -40,6 +48,7 @@
                         </td>
                         <td class="text-xs-right">
                             <v-progress-circular
+                                    v-if="!props.item.is_dl_wget_error"
                                     v-bind:size=sizeProgress
                                     v-bind:width=widthProgress
                                     v-bind:rotate="280"
@@ -48,6 +57,7 @@
                             >
                                 ${ props.item.percent_wget }
                             </v-progress-circular>
+                            <v-icon v-else large color="red" v-on:click="reloadWget" v-bind:id=props.item.id_download>mdi-alert-outline</v-icon>
                         </td>
                         <td class="text-xs-right">${ props.item.speed_wget }</td>
                         <td class="text-xs-right">${ props.item.time_left }</td>
@@ -116,6 +126,13 @@
                     $.get( "/check_torrent", function( data ) {
                         vue.is_visible_load = false;
                     });
+                },
+                showLoad: function (items) {
+                    items.is_clicked = true;
+                },
+                reloadWget: function (event) {
+                    console.log(event.target.id_download);
+                    $.post( "/reload_wget_torrent", {id_torrent: event.target.id});
                 }
             },
             props: {
