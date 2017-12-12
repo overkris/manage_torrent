@@ -23,16 +23,22 @@
                 >
                     <template slot="items" slot-scope="props">
                         <td>
-                            <div v-on:click="showLoad(props.item)">
-                                <template v-if="!props.item.is_clicked">
-                                    <v-icon v-if="props.item.is_delete === 'N'" small color="primary" v-on:click="delete_transmission(props.item)" v-bind:id=props.item.id_transmission>mdi-delete</v-icon>
-                                    <v-icon v-else small color="red" v-bind:id=props.item.id_transmission>mdi-delete</v-icon>
-                                    <v-icon v-if="props.item.is_delete === 'O'" small color="red" v-on:click="delete_table" v-bind:id=props.item.id_transmission>mdi-close</v-icon>
-                                </template>
-                                <template v-else>
-                                    <v-progress-circular indeterminate color="red"></v-progress-circular>
-                                </template>
-                            </div>
+                            <template v-if="!props.item.is_clicked">
+                                <v-icon v-if="props.item.is_delete === 'N'" small color="primary"
+                                        v-on:click="delete_transmission(props.item)">
+                                    mdi-delete
+                                </v-icon>
+                                <v-icon v-else small color="red"
+                                        v-bind:id=props.item.id_transmission>
+                                    mdi-delete
+                                </v-icon>
+                                <v-icon v-if="props.item.is_delete === 'O'" small color="red" v-on:click="delete_table(props.item)">
+                                    mdi-close
+                                </v-icon>
+                            </template>
+                            <template v-else>
+                                <v-progress-circular indeterminate color="red"></v-progress-circular>
+                            </template>
                         </td>
                         <td>${ props.item.name_torrent }</td>
                         <td class="text-xs-right">
@@ -57,7 +63,7 @@
                             >
                                 ${ props.item.percent_wget }
                             </v-progress-circular>
-                            <v-icon v-else large color="red" v-on:click="reloadWget" v-bind:id=props.item.id_download>mdi-alert-outline</v-icon>
+                            <v-icon v-else large color="red" v-on:click="reloadWget(props.item)">mdi-alert-outline</v-icon>
                         </td>
                         <td class="text-xs-right">${ props.item.speed_wget }</td>
                         <td class="text-xs-right">${ props.item.time_left }</td>
@@ -110,11 +116,13 @@
                 }, 2000)
             },
             methods: {
-                delete_transmission: function (event) {
-                    $.post( "/delete_torrent_transmission", {id_torrent: event.target.id});
+                delete_transmission: function (item) {
+                    this.showLoad(item);
+                    $.post( "/delete_torrent_transmission", {id_torrent: item.id_transmission});
                 },
-                delete_table: function (event) {
-                    $.post( "/delete_torrent", {id_torrent: event.target.id});
+                delete_table: function (item) {
+                    this.showLoad(item);
+                    $.post( "/delete_torrent", {id_torrent: item.id_transmission});
                 },
                 updateGrid: function () {
                     $.get( "/content_table", function( data ) {
@@ -130,9 +138,8 @@
                 showLoad: function (items) {
                     items.is_clicked = true;
                 },
-                reloadWget: function (event) {
-                    console.log(event.target.id_download);
-                    $.post( "/reload_wget_torrent", {id_torrent: event.target.id});
+                reloadWget: function (item) {
+                    $.post( "/reload_wget_torrent", {id_torrent: item.id_download});
                 }
             },
             props: {
